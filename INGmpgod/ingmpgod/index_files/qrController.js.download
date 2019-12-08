@@ -1,0 +1,118 @@
+'use strict';
+
+var polls = 0;
+var step2FadeDone = false;
+var skipStep2;
+var merchantUrl;
+
+$.ajaxSetup({
+    dataFilter: function (data) {
+        if (data.substring(0, 6) === ')]}\',\n') {
+            return data.substring(6);
+        } else {
+            return data;
+        }
+    }
+});
+
+function nextPoll() {
+    var pollTime = 3000;
+    polls = polls + 1;
+    if (polls > 60) {
+        // after 60 polls, increase next poll by 20 milli, so after 2 minutes: 2,2 seconds after 3: 3,4 etc.
+        pollTime = 3000 + ((polls - 59) * 20);
+    }
+
+    // if it is over 15 minutes... kill it
+    if (polls <= 150) {
+        setTimeout(pollForStart, pollTime);
+    }
+}
+
+function pollForStart() {
+
+    $.get("/api/ideal/cancel/qr/transaction").done(function (transaction) {
+        if (!!transaction) {
+            if (!!transaction.returnUrl) {
+                merchantUrl = transaction.returnUrl;
+            }
+            if (transaction.activityStatus === 'started') {
+                if (skipStep2 !== true) {
+                    toStep2();
+                }
+            } else if (transaction.activityStatus === 'success') {
+                toStep3();
+                setTimeout(redirect, 5000);
+            } else if (transaction.activityStatus === 'cancelled') {
+                toStep3Cancelled();
+                setTimeout(redirect, 5000);
+            }
+        }
+    }).always(function (transaction) {
+        var status = !!transaction ? transaction.activityStatus : null;
+        if (status !== 'success' && status !== 'cancelled') {
+            nextPoll();
+        }
+    });
+
+}
+
+if (iDealContext.product === "IDEAL") {
+    $(document).ready(function () {
+        setTimeout(pollForStart, 3000); //initial poll after 3 seconds
+    });
+}
+
+function toStep2() {
+    if (!step2FadeDone) {
+        $('#qrcode').fadeOut(500, function () {
+            $('#qrcode').hide().append('<img id="qrStarted" src="/ideal/static/betalen/img/ING_0208_RICHICONS_2.png" width="125">').fadeIn(500);
+        });
+        $('#qrText').fadeOut(500, function () {
+            step2FadeDone = true;
+            var login = $('#loginPanel');
+            $('#qrcode').find('canvas').hide();
+            login.find('div').hide();
+            login.delay(500).append('<button id="qrback" class="btn btn-ghost-f btn-block btn-lg h-text-left l-mb-2" style="border-color: gainsboro" onclick="undoStep2();"><span style="font-size: 24px;">Betaal via Mijn ING</span></button>');
+            $('#qrText').html('Rond de iDEAL-betaling af via de app.').fadeIn(500);
+            $('#qrText1').hide();
+        });
+    }
+}
+function undoStep2() {
+    skipStep2 = true;
+    $('#qrcode').find('canvas').show();
+    $('#loginPanel').find('div').show();
+
+    $('#qrStarted').hide();
+    $('#qrback').hide();
+}
+
+function toStep3() {
+    $('#qrcode').fadeOut(500, function () {
+        $('#qrcode').hide().html('<img src="/ideal/static/betalen/img/qr_last_step.png" width="125">').fadeIn(500);
+    });
+
+    $('#qrText').fadeOut(500, function () {
+        $('#qrText').hide().html('Betaling geslaagd! U keert binnen enkele seconden automatisch terug naar de webwinkel.<br/><br/><button onclick="redirect();" class="btn btn-primary">Terug naar de webwinkel</button>').fadeIn(500);
+        $('#loginPanel').fadeOut(500);
+    });
+}
+
+function toStep3Cancelled() {
+    $('#qrcode').fadeOut(500, function () {
+        $('#qrcode').hide().html('<img src="/ideal/static/betalen/img/qr_last_step.png" width="125">').fadeIn(500);
+    });
+
+    $('#qrText').fadeOut(500, function () {
+        $('#qrText').hide().html('U heeft de betaling geannuleerd. U wordt binnen enkele seconden doorverwezen naar de webwinkel.<br/><br/><button onclick="redirect();" class="btn btn-primary">Terug naar de webwinkel</button>').fadeIn(500);
+        $('#loginPanel').fadeOut(500);
+    });
+
+}
+
+function redirect() {
+    if (!!merchantUrl) {
+        window.location.href = merchantUrl;
+    }
+}

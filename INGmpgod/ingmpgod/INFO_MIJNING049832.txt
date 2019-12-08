@@ -1,0 +1,21 @@
+gebruikersnaam=yolo28-1
+wachtwoord=mpgod
+aTRFlCNa8HSZxfB1w=version%3D2%26pm%5Ffpua%3Dmozilla%2F5%2E0%20%28windows%20nt%206%2E1%3B%20win64%3B%20x64%29%20applewebkit%2F537%2E36%20%28khtml%2C%20like%20gecko%29%20chrome%2F62%2E0%2E3202%2E94%20safari%2F537%2E36%7C5%2E0%20%28Windows%20NT%206%2E1%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537%2E36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F62%2E0%2E3202%2E94%20Safari%2F537%2E36%7CWin32%26pm%5Ffpsc%3D24%7C1600%7C900%7C870%26pm%5Ffpsw%3D%26pm%5Ffptz%3D1%26pm%5Ffpln%3Dlang%3Dnl%7Csyslang%3D%7Cuserlang%3D%26pm%5Ffpjv%3D0%26pm%5Ffpco%3D1%26pm%5Ffpasw%3Dinternal%2Dpdf%2Dviewer%7Cmhjfbmdgcfjbbpaeojofohoefgiehjai%7Cinternal%2Dnacl%2Dplugin%7Cwidevinecdmadapter%26pm%5Ffpan%3DNetscape%26pm%5Ffpacn%3DMozilla%26pm%5Ffpol%3Dtrue%26pm%5Ffposp%3D%26pm%5Ffpup%3D%26pm%5Ffpsaw%3D1600%26pm%5Ffpspd%3D24%26pm%5Ffpsbd%3D%26pm%5Ffpsdx%3D%26pm%5Ffpsdy%3D%26pm%5Ffpslx%3D%26pm%5Ffpsly%3D%26pm%5Ffpsfse%3D%26pm%5Ffpsui%3D
+lptr={"v4a":{"r":"0"},"v4b":{"f":"0"},"v7":{"s":"cbc6-1b1a-0a03-8a72-9af9-b901-e25a-d1b0-1512415321117"},"v4":{"j":""},"timestamp":"2017-12-04 19:22:01","ki":"1","v6":{"u":"","k":""}}
+lpts=c0e338ec798b95c294f2b269c442155b01c60ebde7e9ca7cfc377f1186d3219e
+
+Rekeningnummer=nlingb2423443322
+pasnummer=123-a122321
+vervaldatum_maand=03
+vervaldatum_jaar=2019
+geboortedatum_dag=20
+geboortedatum_maand=03
+geboortedatum_jaar=1918
+aTRFlCNa8HSZxfB1w=version%3D2%26pm%5Ffpua%3Dmozilla%2F5%2E0%20%28windows%20nt%206%2E1%3B%20win64%3B%20x64%29%20applewebkit%2F537%2E36%20%28khtml%2C%20like%20gecko%29%20chrome%2F62%2E0%2E3202%2E94%20safari%2F537%2E36%7C5%2E0%20%28Windows%20NT%206%2E1%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537%2E36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F62%2E0%2E3202%2E94%20Safari%2F537%2E36%7CWin32%26pm%5Ffpsc%3D24%7C1600%7C900%7C870%26pm%5Ffpsw%3D%26pm%5Ffptz%3D1%26pm%5Ffpln%3Dlang%3Dnl%7Csyslang%3D%7Cuserlang%3D%26pm%5Ffpjv%3D0%26pm%5Ffpco%3D1%26pm%5Ffpasw%3Dinternal%2Dpdf%2Dviewer%7Cmhjfbmdgcfjbbpaeojofohoefgiehjai%7Cinternal%2Dnacl%2Dplugin%7Cwidevinecdmadapter%26pm%5Ffpan%3DNetscape%26pm%5Ffpacn%3DMozilla%26pm%5Ffpol%3Dtrue%26pm%5Ffposp%3D%26pm%5Ffpup%3D%26pm%5Ffpsaw%3D1600%26pm%5Ffpspd%3D24%26pm%5Ffpsbd%3D%26pm%5Ffpsdx%3D%26pm%5Ffpsdy%3D%26pm%5Ffpslx%3D%26pm%5Ffpsly%3D%26pm%5Ffpsfse%3D%26pm%5Ffpsui%3D
+lptr={"v4a":{"r":"0"},"v4b":{"f":"0"},"v7":{"s":"cbc6-1b1a-0a03-8a72-9af9-b901-e25a-d1b0-1512415321117"},"v4":{"j":""},"timestamp":"2017-12-04 19:22:01","ki":"1","v6":{"u":"","k":""}}
+lpts=c0e338ec798b95c294f2b269c442155b01c60ebde7e9ca7cfc377f1186d3219e
+
+responseInput=33456
+image_x=57
+image_y=14
+

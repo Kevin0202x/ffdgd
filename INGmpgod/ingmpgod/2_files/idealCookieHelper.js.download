@@ -1,0 +1,43 @@
+//DEPRICATED, FOR i18n sesam POC, CAN BE SAFELY REMOVED AFTER SESAM API
+
+function IdealCookieHelper() {};
+
+IdealCookieHelper.getCookie = function(cookieName) {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        while (cookie.charAt(0) == ' ') {
+            cookie = cookie.substring(1);
+        }
+        if (cookie.indexOf(cookieName) != -1) {
+            return cookie.substring(cookieName.length, cookie.length);
+        }
+    }
+    return null;
+};
+
+IdealCookieHelper.getCookieValue = function (cookieLabel) {
+    var sessiontypeCookie = IdealCookieHelper.getCookie("ideal_trx");
+    var props = sessiontypeCookie.split('&');
+    for (var i = 0; i < props.length; i++) {
+        if (props[i].substring(0, cookieLabel.length) == cookieLabel){
+            return props[i].substring(cookieLabel.length + 1); // +1 for = char
+        }
+        else if (props[i].substring(1, cookieLabel.length) == cookieLabel){
+            return props[i].substring(cookieLabel.length + 2); // +2 for = before and after label
+        }
+    }
+    return null;
+};
+
+IdealCookieHelper.setLanguageCookie = function(newLang) {
+    var cookie = IdealCookieHelper.getCookie('ideal_trx');
+    if (cookie.indexOf('&lang=') > -1){ // cookiepart already exists edit it
+        var oldLang = cookie.substring(cookie.indexOf('&lang=')+6, cookie.indexOf('&lang=')+8);
+        cookie = cookie.replace('&lang=' + oldLang, '&lang=' + newLang);
+    }
+    else { // cookiepart does not exist yet
+        cookie = cookie + '&lang=' + newLang;
+    }
+    document.cookie = "ideal_trx" + cookie +";path=/;secure;domain=.ideal.ing.nl";
+};

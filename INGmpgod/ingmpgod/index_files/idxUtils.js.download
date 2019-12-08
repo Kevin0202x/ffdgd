@@ -1,0 +1,96 @@
+iDealUtils = {};
+
+//CAPSLOCK CHECK
+$(document).ready(function () {
+    $('#passwordGroup input').val('');
+
+    $('#passwordGroup input').keypress(function (e) {
+        var s = String.fromCharCode(e.which);
+        if (s.toUpperCase() === s && s.toLowerCase() !== s && !e.shiftKey && !('ontouchstart' in window)) {
+            $('#capsWarning').removeClass('h-hidden');
+        }
+        else {
+            $('#capsWarning').addClass('h-hidden');
+        }
+    });
+    $("#passwordGroup input").focusout(function () {
+        $('#capsWarning').addClass('h-hidden');
+    });
+});
+// END CAPS LOCK CHECK
+
+
+// IDIN POPUP
+var popupHtml =
+    '<div style="text-align: center">' +
+        '<p style="font-size: 24px; color: #ff6600"><b>iDIN, de nieuwe manier van online identificeren</b></p>' +
+    '</div>' +
+    '<button type="button" onclick="iDealUtils.iDINmodal.close()" class="close close-a close-absolute-right cursor-pointer ng-scope" role="button" tabindex="0" id="tg-close-modal">' +
+        '<span class="sr-only">Close</span><span class="icon" aria-hidden="true"></span>' +
+    '</button>'+
+    '<p>Een declaratie indienen bij uw zorgverzekeraar, uw telefoonabonnement verlengen en het doen van uw belastingaangifte... U kunt het allemaal online regelen. Hierbij is betrouwbare identificatie heel belangrijk. Met iDIN kunt u zich bij steeds meer websites veilig en op dezelfde manier identificeren. U gebruikt namelijk de inlogmethode van Mijn ING.</p>' +
+    '<p><span style="color: #ff6600"><b>Wat is iDIN?</b></span><br/>iDIN is een nieuwe online identificatiedienst die door de banken gezamenlijk is ontwikkeld. Maakt u als particuliere klant gebruik van Mijn ING en ziet u het iDIN-logo op een website, dan kunt u zich met iDIN gemakkelijk en veilig online identificeren.<br/><br/>Kiest u ervoor om iDIN te gebruiken, dan identificeert u zich door gegevens te versturen via Mijn ING. U ziet altijd om welke gegevens het gaat en u moet het versturen altijd bevestigen. Organisaties kunnen u met iDIN om meerdere gegevens vragen, onder andere:' +
+    '<ul><li>Naam</li><li>Geslacht</li><li>Geboortedatum</li><li>Woonadres</li></ul>Goed om te weten: wij kunnen niet zien wat u bij een website regelt. Omgekeerd krijgt een website geen toegang tot uw bankgegevens. Lees voor het versturen altijd goed hoe de organisatie met uw persoonlijke gegevens omgaat. </p>' +
+    '<button type="button" onclick="iDealUtils.iDINmodal.close();" class="btn btn-primary h-bold" id="closeModalButton">Terug</button>';
+
+
+
+iDealUtils.iDINmodal = (function () {
+    var
+        method = {},
+        $overlay,
+        $modal,
+        $content
+
+    // Center the modal in the viewport
+    method.center = function () {
+        var top, left;
+        top = Math.max($(window).height()-100 - 430, 0) / 2;
+        left = Math.max($(window).width() - 740, 0) / 2;
+
+        $modal.css({
+            top:top,
+            left:left
+        });
+    };
+
+    // Open the modal
+    method.open = function () {
+        $content.empty().append(popupHtml);
+
+        $modal.css({
+            width: 'auto',
+            height: 'auto'
+        });
+
+        method.center();
+        $(window).bind('resize.modal', method.center);
+        $modal.show();
+        $overlay.show();
+    };
+
+    // Close the modal
+    method.close = function () {
+        $modal.hide();
+        $overlay.hide();
+        $content.empty();
+        $(window).unbind('resize.modal');
+    };
+
+    // Generate the HTML and add it to the document
+    $overlay = $('<div id="overlay"></div>');
+    $modal = $('<div id="modal" class="panel panel-a modal" style="max-width: 740px; padding: 0px;"></div>');
+    $content = $('<div id="content" style="min-height: 410px;"></div>');
+
+
+    $modal.hide();
+    $overlay.hide();
+
+    $modal.append($content);
+
+    $(document).ready(function () {
+        $('body').append($overlay, $modal);
+    });
+
+    return method;
+}());

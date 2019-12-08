@@ -1,0 +1,29 @@
+#footer {
+     border-top: 1px solid #cccccc;
+     font-size: 10px;
+     margin-top: 40px;
+}
+
+#footer p {
+     height: 13px;
+     margin: 0px;
+     text-align: right;
+}
+
+#footer p a:link, #footer p a:visited {
+     color: #aba195;
+     text-decoration: none;
+}
+
+#footer p a:hover {
+     text-decoration: underline;
+}
+
+#footer p a {
+     padding-left: 60px;
+}
+
+.header-authmenu {
+     float: right;
+     margin-top: 26px;
+}

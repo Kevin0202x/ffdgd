@@ -1,0 +1,201 @@
+// MINIFIED COPIED VERSION OF IDEAL_COOKIE_HELPER
+function IdealCookieHelper(){}IdealCookieHelper.getCookie=function(e){for(var n=document.cookie.split(";"),i=0;i<n.length;i++){for(var l=n[i];" "==l.charAt(0);)l=l.substring(1);if(-1!=l.indexOf(e))return l.substring(e.length,l.length)}return null},IdealCookieHelper.getCookieValue=function(e){for(var n=IdealCookieHelper.getCookie("ideal_trx"),i=n.split("&"),l=0;l<i.length;l++){if(i[l].substring(0,e.length)==e)return i[l].substring(e.length+1);if(i[l].substring(1,e.length+1)==e)return i[l].substring(e.length+2)}return null},IdealCookieHelper.setLanguageCookie=function(e){var n=IdealCookieHelper.getCookie("ideal_trx");if(n.indexOf("&lang=")>-1){var i=n.substring(n.indexOf("&lang=")+6,n.indexOf("&lang=")+8);n=n.replace("&lang="+i,"&lang="+e)}else n=n+"&lang="+e;document.cookie="ideal_trx"+n+";path=/;secure;domain=.ideal.ing.nl"};
+// END COOKIE_HELPER
+
+/** Product Identifier */
+var iDealContext = {};
+
+var prdctCatalog = {iDEAL: "IDEAL", unknown: "UNKNOWN", eMandates: "EMANDATES", iDIN: "IDIN"};
+
+function identifyProduct(){
+    iDealContext.trxId = IdealCookieHelper.getCookieValue("trxid");
+    iDealContext.random = IdealCookieHelper.getCookieValue("random");
+    iDealContext.productId = iDealContext.random == null ? null : iDealContext.random.charAt(0);
+
+    pId = iDealContext.productId;
+    if (pId === "g" || pId === "h" || pId === "i" || pId === "j") iDealContext.product = prdctCatalog.eMandates;
+    else if (pId === "k" || pId === "l" || pId === "m" || pId === "n" || pId === "o" || pId === "p") iDealContext.product = prdctCatalog.iDIN;
+    else if (pId === "z") iDealContext.product = prdctCatalog.iDEAL;
+    else iDealContext.product = prdctCatalog.unknown;
+}
+
+try{identifyProduct()}catch (e){iDealContext.product = prdctCatalog.unknown};
+
+/** END product Identifier*/
+
+/** LABELS */
+var unknownTxt  = {
+    title: 'Er is iets fout gegaan - Mijn ING'
+};
+
+var genericTxt  = {
+    username: 'Gebruikersnaam',
+    password: 'Wachtwoord',
+    saveUser: 'Gebruikersnaam opslaan',
+    login: 'Inloggen',
+    cancel: 'Annuleren',
+    rememberTxt: 'Wachtwoord/gebruikersnaam vergeten',
+    hlpLink: 'Help',
+    safeLink: 'Veilig betalen met iDEAL'
+};
+
+var idealTxt = {
+    prdTitle: 'iDEAL betaling',
+    prdTxt: 'Controleer of het adres begint met https://ideal.ing.nl/ en of u het slotje in de browser ziet.',
+    qrHeader: 'Betaal met de Mobiel Bankieren App',
+    qrText: "Open de Mobiel Bankieren App, selecteer 'Scanner' in het menu en scan deze QR-code om de iDEAL-betaling over te nemen met uw mobiel." ,
+    loginTitle: 'Betaal met Mijn ING'
+};
+
+
+var idinTxt = {
+    title: 'iDIN - Mijn ING',
+    loginTitle: 'Inloggen Mijn ING',
+    prdTxt: 'Om iDIN te gebruiken, logt u in met uw Mijn ING gegevens. Controleer of het internetadres begint met https://ideal.ing.nl/ en of u het slotje in de browser ziet.',
+    prdTitle: 'Gegevens ophalen met iDIN',
+    prdTitleLogin: 'Inloggen met iDIN'
+};
+
+var emanTxt = {
+    title: 'Incassomachtigen - Mijn ING',
+    loginTitle: 'Inloggen Mijn ING',
+    productText: 'Om een incassomachtiging af te geven, logt u in op Mijn ING. Controleer of het internetadres begint met https://ideal.ing.nl/ en of u het slotje in de browser ziet.',
+    createMandate: 'Incassomachtiging afgeven',
+    changeMandate: 'Incassomachtiging wijzigen',
+    deleteMandate: 'Incassomachtiging intrekken'
+};
+/** END LABELS */
+
+
+/** Transformation */
+$(document).ready(function () {
+    $('#cover').hide();
+    if (iDealContext.product === prdctCatalog.unknown){
+        noQrPanel().noProductLogo().no('loginPanel').no('mainTitle').noFooter().withPageTitle(unknownTxt.title).
+            showUnknownProductError();
+    }
+    else if (iDealContext.product === prdctCatalog.iDEAL){
+        $('#qrcode').html("");
+        $('#qrcode').qrcode({size:164, text: 'https://bankieren.ideal.ing.nl/ideal/betalen/inlog-annuleren/static/detect_qr?trxid='+iDealContext.trxId+'&random='+iDealContext.random});
+        withMainTitle(idealTxt.prdTitle).setPrdTxt(idealTxt.prdTxt).withQrHeader(idealTxt.qrHeader).withQrText(idealTxt.qrText).
+            withLoginTitle(idealTxt.loginTitle);
+    }
+    else if (iDealContext.product === prdctCatalog.iDIN) {
+        noQrPanel().withPageTitle(idinTxt.title).withLoginTitle(idinTxt.loginTitle).setPrdTxt(idinTxt.prdTxt).
+            withLogo('/ideal/static/identificeren/img/iDIN_logo.svg').setIdinHelpModal();
+
+        // appropriate title based on type of idin
+        if (iDealContext.productId === "k" || iDealContext.productId === "p") withMainTitle(idinTxt.prdTitle);
+        else withMainTitle(idinTxt.prdTitleLogin);
+    }
+    else if (iDealContext.product === prdctCatalog.eMandates) {
+        noQrPanel().noProductLogo().withPageTitle(emanTxt.title).withLoginTitle(emanTxt.loginTitle).noFooter().
+            setPrdTxt(emanTxt.prdTxt);
+
+        // appropriate title based on type of mandate
+        if (iDealContext.productId === "i") withMainTitle(emanTxt.changeMandate);
+        else if (iDealContext.productId === "j") withMainTitle(emanTxt.deleteMandate);
+        else withMainTitle(emanTxt.createMandate);
+    }
+
+    setBackgroundColor();
+    setGenericLabels();
+
+});
+/** END Transformation */
+
+/** START Trusteer callback */
+function createHiddenField(theName, theValue) {
+    var inputEl = document.createElement("input");
+    inputEl.setAttribute("type", "hidden");
+    inputEl.setAttribute("name", theName);
+    inputEl.setAttribute("id", theName);
+    inputEl.setAttribute("value", theValue);
+    document.login.appendChild(inputEl);
+}
+function pCallback(results_string, signature) {
+    createHiddenField("lptr", results_string);
+    createHiddenField("lpts", signature);
+}
+(function() {
+    var snippetID = '19952',
+        host = 'ideal.ing.nl',
+        sn = document.createElement('script');
+    sn.setAttribute('async', true);
+    sn.setAttribute('type', 'text/javascript');
+    sn.setAttribute('src', '/lpt/start.js');
+    var ndn = document.getElementsByTagName('script')[0];
+    ndn.parentNode.insertBefore(sn, ndn);
+})();
+/** END Trusteer callback */
+
+/** Builder functions */
+function setBackgroundColor() {
+    $("body").css({"background-color":"white"});
+}
+function noQrPanel() {
+    $('#qrPanel').attr('style', 'display: none !important'); //important since guide classes will overwrite
+    return this;
+}
+function withLogo(logoUrl) {
+    $('#prdLogo').html('<img src="'+logoUrl+'"  style="margin-bottom: -3px;" height="52px">');
+    return this;
+}
+function withLoginTitle(title){
+    $('#loginTitle').html(title);
+    return this;
+}
+function withQrHeader(qrheader){
+    $('#qrHeader').html(qrheader);
+    return this;
+}
+function withQrText(tekst){
+    $('#qrText').html(tekst);
+    return this;
+}
+function withMainTitle(title){
+    $('#mainTitle').html(title);
+    return this;
+}
+function noFooter() {
+    $('#footerLinks').html("");
+    return this;
+}
+function setPrdTxt(text){
+    $('#p1').html(text);
+    return this;
+}
+function setIdinHelpModal() {
+    $('#footerLinks').html("<div><a href='#' onclick='iDealUtils.iDINmodal.open();' class='link-a ng-scope'><span aria-hidden='true' class='icon icon-arrow-c-right icon-xs'></span>Lees hier hoe iDIN werkt</a></div>");
+    return this;
+}
+function noProductLogo() {
+    $('#prdLogoSpacer').css('display', 'none');
+    $('#prdLogo').html("");
+    return this;
+}
+function no(id){
+    $('#'+id).css('display', 'none');
+    return this;
+}
+function withPageTitle(title){
+    document.title = title;
+    return this;
+}
+function showUnknownProductError(){
+    $('#p1').html("<div class='alert alert-inline alert-warning' role='alert'><span class='stacked-icon icon-lg'><span aria-hidden='true' class='icon icon-notification-warning-z1 icon-orange'></span><span aria-hidden='true' class='icon icon-white icon-notification-warning-z2'></span></span><p><strong>Er is iets fout gegaan!</strong></p><p>Ga terug naar de aanbieder en probeer het opnieuw.</p></div>");
+    return this;
+}
+
+function setGenericLabels() {
+    $('#usrNameLbl').html(genericTxt.username);
+    $('#passwordLbl').html(genericTxt.password);
+    $('#saveUser').html(genericTxt.saveUser);
+    $('#loginButton').html(genericTxt.login);
+    $('#cancelButton').html(genericTxt.cancel);
+    $('#rememberTxt').html(genericTxt.rememberTxt);
+    $('#hlpLink').html(genericTxt.hlpLink);
+    $('#safeLink').html(genericTxt.safeLink);
+    $('#capsLockWarning').html('<strong>Pas op!</strong> De Caps Lock toets staat aan');
+}
+
